@@ -1,0 +1,10 @@
+[project]
+name = "battleships"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "blessed>=1.21.0",
+    "pygame>=2.6.1",
+]
