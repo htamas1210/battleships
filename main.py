@@ -45,13 +45,14 @@ def main():
                 print("Quitting Battleships")
                 return
 
-        pygame.Surface.fill(screen, (0,0,0))
-
+        pygame.Surface.fill(screen, (255,255,255))
         
+        player.draw(screen)
 
         pygame.display.flip() #refresh screen
 
-
+        r = input("add input")
+        print(r)
 
         dt = time.tick(60) / 1000 #converted to ms
 
