@@ -13,9 +13,9 @@ def main():
         sys.exit(1)
 
     print("Please input your list of positions, from smallest ship to the largest, for your ships.")
-    print("Format: a[A]1-a[A]5 b[B]2-b[B]3. [A] means it can either be upper or lower case.")
-    print("You need to place five ships with sizes: 5, 4, 3, 3, 2. Otherwise the game won't start")
-    print("Have fun")
+    print("Format: a[A]1-a[A]5 b[B]2-b[B]3. [A] means it can either be upper or lower case. Please input the positions from lowest to highest.")
+    print("You must have 5 ships. The ships can be of any size between 1 and 5.")
+    print("Have fun.")
     
     good_inp = False
     player_board = []
@@ -28,9 +28,8 @@ def main():
     player = Player(player_board)
     enemy = Player(enemy_board)
 
-
-    for i in range(10):
-        for j in range(10):
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
             print(f"{player.board[i][j]} ", end="")
         print()
 
@@ -38,6 +37,7 @@ def main():
 
     time = pygame.time.Clock()
     dt = 0
+    first_iteration = True
 
     while True:
         for event in pygame.event.get():
@@ -47,12 +47,14 @@ def main():
 
         pygame.Surface.fill(screen, (255,255,255))
         
+        if first_iteration == False:
+            player.update(enemy_board)
+        else:
+            first_iteration = False
+
         player.draw(screen)
 
         pygame.display.flip() #refresh screen
-
-        r = input("add input")
-        print(r)
 
         dt = time.tick(60) / 1000 #converted to ms
 
@@ -61,16 +63,19 @@ def check_valid_input(inp):
     s = inp.split(' ')
     print("s", s)
     board = []
-    for i in range(10):
+    for i in range(BOARD_SIZE):
         board.append([])
-        for _ in range(10):
+        for _ in range(BOARD_SIZE):
             board[i].append(0)
 
     if len(s) != 5:
         print("Not valid input. Please input again")
         return (False, board)
     else:
+        count = 0
         for position in s:
+            count += 1
+            print("c", count)
             position = position.lower()
             t = position.split("-")
             print("t", t)
@@ -82,21 +87,21 @@ def check_valid_input(inp):
                     else:
                         step = 1
                     
-                    print(int(t[0][1]), int(t[1][1]))
                     for column in range(int(t[0][1]), int(t[1][1])+1, step):
                         if board[ord(t[0][0])-97][column] == 0b01:
                             print("this position is already taken!")
                             return (False, board)
 
-                        print("in")
                         board[ord(t[0][0])-97][column] = 0b01 #first means if it is hit, second means placement
                         
-                    print(board)
+                        for i in range(BOARD_SIZE):
+                            for j in range(BOARD_SIZE):
+                                print(f"{board[i][j]} ", end="")
+                            print()
                 else:
                     print("e1")
                     return (False, board)
             elif t[0][1] == t[1][1] and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and abs(int(t[0][1]) - int(t[1][1]))+1 < 6:
-                print("in2")
                 if ord(t[0][0]) >= 97 and ord(t[0][0]) <= 107 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 107 and t[0][0] != t[1][0]:
                     if ord(t[0][0]) > ord(t[1][0]):
                         step = -1
@@ -108,10 +113,12 @@ def check_valid_input(inp):
                            print("this position is already taken!")
                            return (False, board)
 
-                        print("in3")
                         board[row][int(t[0][1])] = 0b01 #first means if it is hit, second means placement
                         
-                    print(board)
+                    for i in range(BOARD_SIZE):
+                        for j in range(BOARD_SIZE):
+                            print(f"{board[i][j]} ", end="")
+                        print()
             else:
                 print("e2")
                 return (False, board)
