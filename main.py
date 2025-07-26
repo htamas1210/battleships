@@ -1,6 +1,7 @@
 import pygame
 import sys
 from constants import *
+from player import *
 
 def main():
     print("Starting BattleShip!")
@@ -24,10 +25,13 @@ def main():
         good_inp, player_board = check_valid_input(inp)
         enemy_board = player_board.copy()
 
+    player = Player(player_board)
+    enemy = Player(enemy_board)
+
 
     for i in range(10):
         for j in range(10):
-            print(f"{board[i][j]} ", end="")
+            print(f"{player.board[i][j]} ", end="")
         print()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
