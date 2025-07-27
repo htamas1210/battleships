@@ -2,6 +2,7 @@ import pygame
 import sys
 from constants import *
 from player import *
+import copy
 
 def print_board(board):
     for i in range(BOARD_SIZE):
@@ -32,18 +33,19 @@ def main():
     while good_inp == False:
         inp = input()
         good_inp, player_board, ship_pos = check_valid_input(inp)
-        enemy_board = player_board.copy()
+        enemy_board = copy.deepcopy(player_board)
 
-    player = Player(player_board, ship_pos)
-    enemy = Player(enemy_board, ship_pos)
+    player = Player(player_board, ship_pos.copy())
+    enemy = Player(enemy_board, ship_pos.copy())
 
     print_board(player_board)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     time = pygame.time.Clock()
-    dt = 0
+    turn_counter = 0
     first_iteration = True
+    is_enemy_turn = False
 
     while True:
         for event in pygame.event.get():
@@ -54,7 +56,12 @@ def main():
         pygame.Surface.fill(screen, (255,255,255))
         
         if first_iteration == False:
-            player.update(enemy)
+            if is_enemy_turn == False:
+                player.update(enemy)
+                is_enemy_turn = True
+            else:
+                enemy.random_shoot(player)
+                is_enemy_turn = False
         else:
             first_iteration = False
 
@@ -62,7 +69,8 @@ def main():
 
         pygame.display.flip() #refresh screen
 
-        dt = time.tick(60) / 1000 #converted to ms
+        turn_counter += 1
+        print("turn: ", turn_counter)
 
 
 def check_valid_input(inp):

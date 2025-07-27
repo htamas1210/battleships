@@ -1,6 +1,7 @@
 import pygame
 from pygame import Rect
 from ship import *
+import random
 
 class Player():
     def __init__(self, board, ships):
@@ -23,6 +24,7 @@ class Player():
         
         if enemy.board[ord(position[0])-97][int(position[1])] == 0b00:
             print("No ship at this position")
+            self.shot_positions[ord(position[0])-97][int(position[1])] = 0b01
         else:
             enemy.get_hit(position)
             self.shot_positions[ord(position[0])-97][int(position[1])] = 0b11
@@ -31,19 +33,22 @@ class Player():
         if len(position) != 2 and position != None:
             return False
 
-        if ord(position[0]) >= 97 and ord(position[0]) <= 107 and int(position[1]) <= 9 and int(position[1]) >= 0:
-            return True
-
         if self.shot_positions[ord(position[0])-97][int(position[1])] == 0b11:
             print("You already shot at this position!")
             return False
+
+        if ord(position[0]) >= 97 and ord(position[0]) <= 107 and int(position[1]) <= 9 and int(position[1]) >= 0:
+            return True
 
         return False
 
     def update(self, enemy):
         inp = input("Please input the position you want to fire.")
-        while self.__check_valid_input(inp) == False:
-            inp = input("Please input the position you want to fire.")
+        check = self.__check_valid_input(inp)
+        
+        while check == False:
+            inp = input("Please input the position you want to fire. ")
+            check = self.__check_valid_input(inp)
 
         self.shoot(inp, enemy)
 
@@ -84,3 +89,10 @@ class Player():
             start_pos_y += height - 5
             start_pos_x = 125
 
+
+    def random_shoot(self, enemy):
+        position = chr(random.randint(97, 107))
+        position += str(random.randint(0,9))
+        print("rand pos: ", position)
+        
+        self.shoot(position, enemy)
