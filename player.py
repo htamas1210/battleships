@@ -1,21 +1,31 @@
 import pygame
 from pygame import Rect
+from ship import *
+
 class Player():
-    def __init__(self, board, ships = 5):
+    def __init__(self, board, ships):
         self.board = board
-        self.ships = ships #alive ships
         self.shot_positions = []
         for i in range(0, len(board)):
             self.shot_positions.append([])
-            for j in range(0, len(board[0])):
+            for _ in range(0, len(board[0])):
                 self.shot_positions[i].append(0)
-                #self.shot_positions[i][j] = 0b01
+        
+        self.ships = []
+        for ship in ships: #[(start, end), (start, end)
+            self.ships.append(Ship(ship[0], ship[1]))
 
     def get_hit(self, position):
-        pass
+        self.board[ord(position[0])-97][int(position[1])] = 0b11
 
-    def shoot(self, position):
-        pass
+    def shoot(self, position, enemy):
+        print("p", position)
+        
+        if enemy.board[ord(position[0])-97][int(position[1])] == 0b00:
+            print("No ship at this position")
+        else:
+            enemy.get_hit(position)
+            self.shot_positions[ord(position[0])-97][int(position[1])] = 0b11
 
     def __check_valid_input(self, position):
         if len(position) != 2 and position != None:
@@ -24,16 +34,18 @@ class Player():
         if ord(position[0]) >= 97 and ord(position[0]) <= 107 and int(position[1]) <= 9 and int(position[1]) >= 0:
             return True
 
+        if self.shot_positions[ord(position[0])-97][int(position[1])] == 0b11:
+            print("You already shot at this position!")
+            return False
+
         return False
 
-
-
-    def update(self, enemy_board):
+    def update(self, enemy):
         inp = input("Please input the position you want to fire.")
         while self.__check_valid_input(inp) == False:
             inp = input("Please input the position you want to fire.")
-            
-        self.shoot(inp)
+
+        self.shoot(inp, enemy)
 
     def draw(self, screen):
         start_pos_x = 125

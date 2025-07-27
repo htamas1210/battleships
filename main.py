@@ -3,6 +3,14 @@ import sys
 from constants import *
 from player import *
 
+def print_board(board):
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            print(f"{board[i][j]} ", end="")
+        print()
+    print()
+
+
 def main():
     print("Starting BattleShip!")
 
@@ -20,18 +28,16 @@ def main():
     good_inp = False
     player_board = []
     enemy_board = []
+
     while good_inp == False:
         inp = input()
-        good_inp, player_board = check_valid_input(inp)
+        good_inp, player_board, ship_pos = check_valid_input(inp)
         enemy_board = player_board.copy()
 
-    player = Player(player_board)
-    enemy = Player(enemy_board)
+    player = Player(player_board, ship_pos)
+    enemy = Player(enemy_board, ship_pos)
 
-    for i in range(BOARD_SIZE):
-        for j in range(BOARD_SIZE):
-            print(f"{player.board[i][j]} ", end="")
-        print()
+    print_board(player_board)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -48,7 +54,7 @@ def main():
         pygame.Surface.fill(screen, (255,255,255))
         
         if first_iteration == False:
-            player.update(enemy_board)
+            player.update(enemy)
         else:
             first_iteration = False
 
@@ -60,6 +66,7 @@ def main():
 
 
 def check_valid_input(inp):
+    ship_pos = []
     s = inp.split(' ')
     print("s", s)
     board = []
@@ -70,7 +77,7 @@ def check_valid_input(inp):
 
     if len(s) != 5:
         print("Not valid input. Please input again")
-        return (False, board)
+        return (False, board, ship_pos)
     else:
         count = 0
         for position in s:
@@ -79,6 +86,7 @@ def check_valid_input(inp):
             position = position.lower()
             t = position.split("-")
             print("t", t)
+            ship_pos.append((t[0], t[1]))
 
             if t[0][0] == t[1][0] and ord(t[0][0]) >= 97 and ord(t[0][0]) <= 107 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 107: #check if the fist chars match
                 if int(t[0][1]) >= 0 and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and int(t[0][1]) != int(t[1][1]) and abs(int(t[0][1]) - int(t[1][1]))+1 < 6: #check if number is in correct range
@@ -90,17 +98,13 @@ def check_valid_input(inp):
                     for column in range(int(t[0][1]), int(t[1][1])+1, step):
                         if board[ord(t[0][0])-97][column] == 0b01:
                             print("this position is already taken!")
-                            return (False, board)
+                            return (False, board, ship_pos)
 
                         board[ord(t[0][0])-97][column] = 0b01 #first means if it is hit, second means placement
-                        
-                        for i in range(BOARD_SIZE):
-                            for j in range(BOARD_SIZE):
-                                print(f"{board[i][j]} ", end="")
-                            print()
+                        print_board(board)
                 else:
                     print("e1")
-                    return (False, board)
+                    return (False, board, ship_pos)
             elif t[0][1] == t[1][1] and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and abs(int(t[0][1]) - int(t[1][1]))+1 < 6:
                 if ord(t[0][0]) >= 97 and ord(t[0][0]) <= 107 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 107 and t[0][0] != t[1][0]:
                     if ord(t[0][0]) > ord(t[1][0]):
@@ -111,22 +115,16 @@ def check_valid_input(inp):
                     for row in range(ord(t[0][0])-97, ord(t[1][0])-97+1, step):
                         if board[row][int(t[0][1])] == 0b01:
                            print("this position is already taken!")
-                           return (False, board)
+                           return (False, board, ship_pos)
 
                         board[row][int(t[0][1])] = 0b01 #first means if it is hit, second means placement
-                        
-                    for i in range(BOARD_SIZE):
-                        for j in range(BOARD_SIZE):
-                            print(f"{board[i][j]} ", end="")
-                        print()
+                        print_board(board)
             else:
                 print("e2")
-                return (False, board)
+                return (False, board, ship_pos)
 
     print("e3")
-    return (True, board)
-
-
+    return (True, board, ship_pos)
 
 if __name__ == "__main__":
     main()
