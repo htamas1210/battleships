@@ -4,8 +4,9 @@ from ship import *
 import random
 
 class Player():
-    def __init__(self, board, ships):
+    def __init__(self, board, ships, player_name):
         self.board = board
+        self.name = player_name
         self.shot_positions = []
         for i in range(0, len(board)):
             self.shot_positions.append([])
@@ -52,7 +53,7 @@ class Player():
 
         self.shoot(inp, enemy)
 
-    def draw(self, screen):
+    def draw(self, screen, enemy):
         start_pos_x = 125
         start_pos_y = 30
         width = 80
@@ -84,6 +85,9 @@ class Player():
                 elif self.board[i][j] == 0b11:
                     pygame.draw.circle(screen, (255,0,0), (start_pos_x+width//2, start_pos_y + height // 2), 20)
 
+                if enemy.shot_positions[i][j] == 0b01:
+                    pygame.draw.circle(screen, (0,255,0), (start_pos_x+width//2, start_pos_y + height // 2), 20)
+
                 start_pos_x += width - 5
 
             start_pos_y += height - 5
@@ -91,8 +95,18 @@ class Player():
 
 
     def random_shoot(self, enemy):
-        position = chr(random.randint(97, 107))
+        position = chr(random.randint(97, 106))
         position += str(random.randint(0,9))
+
+        check = self.__check_valid_input(position)
+
+        while check == False:
+            print("rand check loop")
+            position = chr(random.randint(97, 106))
+            position += str(random.randint(0,9))
+            check = self.__check_valid_input(position)
+
+
         print("rand pos: ", position)
         
         self.shoot(position, enemy)

@@ -35,8 +35,8 @@ def main():
         good_inp, player_board, ship_pos = check_valid_input(inp)
         enemy_board = copy.deepcopy(player_board)
 
-    player = Player(player_board, ship_pos.copy())
-    enemy = Player(enemy_board, ship_pos.copy())
+    player = Player(player_board, ship_pos.copy(), "Player")
+    enemy = Player(enemy_board, ship_pos.copy(), "Enemy")
 
     print_board(player_board)
 
@@ -65,12 +65,30 @@ def main():
         else:
             first_iteration = False
 
-        player.draw(screen)
+        if check_win(player, enemy) == True:
+            print(f"{player.name} won!")
+            sys.exit(0)
+            
+        if check_win(enemy, player) == True:
+            print(f"{player.name} won!")
+            sys.exit(0)
+
+        player.draw(screen, enemy)
 
         pygame.display.flip() #refresh screen
 
         turn_counter += 1
         print("turn: ", turn_counter)
+
+
+def check_win(player, enemy):
+    print(f"checking win for: {player.name}")
+    for i in range(0, BOARD_SIZE):
+        for j in range(0, BOARD_SIZE):
+            if enemy.board[i][j] == 0b01:
+                return False
+
+    return True
 
 
 def check_valid_input(inp):
@@ -96,7 +114,7 @@ def check_valid_input(inp):
             print("t", t)
             ship_pos.append((t[0], t[1]))
 
-            if t[0][0] == t[1][0] and ord(t[0][0]) >= 97 and ord(t[0][0]) <= 107 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 107: #check if the fist chars match
+            if t[0][0] == t[1][0] and ord(t[0][0]) >= 97 and ord(t[0][0]) <= 106 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 106: #check if the fist chars match
                 if int(t[0][1]) >= 0 and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and int(t[0][1]) != int(t[1][1]) and abs(int(t[0][1]) - int(t[1][1]))+1 < 6: #check if number is in correct range
                     if int(t[0][1]) > int(t[1][1]):
                         step = -1
@@ -114,7 +132,7 @@ def check_valid_input(inp):
                     print("e1")
                     return (False, board, ship_pos)
             elif t[0][1] == t[1][1] and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and abs(int(t[0][1]) - int(t[1][1]))+1 < 6:
-                if ord(t[0][0]) >= 97 and ord(t[0][0]) <= 107 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 107 and t[0][0] != t[1][0]:
+                if ord(t[0][0]) >= 97 and ord(t[0][0]) <= 106 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 106 and t[0][0] != t[1][0]:
                     if ord(t[0][0]) > ord(t[1][0]):
                         step = -1
                     else:
