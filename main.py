@@ -38,7 +38,7 @@ def main():
     player = Player(player_board, ship_pos.copy(), "Player")
     enemy = Player(enemy_board, ship_pos.copy(), "Enemy")
 
-    print_board(player_board)
+    #print_board(player_board)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -93,7 +93,7 @@ def check_win(player, enemy):
 def check_valid_input(inp):
     ship_pos = []
     s = inp.split(' ')
-    print("s", s)
+    #print("s", s)
     board = []
     for i in range(BOARD_SIZE):
         board.append([])
@@ -107,10 +107,10 @@ def check_valid_input(inp):
         count = 0
         for position in s:
             count += 1
-            print("c", count)
+            #print("c", count)
             position = position.lower()
             t = position.split("-")
-            print("t", t)
+            #print("t", t)
             ship_pos.append((t[0], t[1]))
 
             if t[0][0] == t[1][0] and ord(t[0][0]) >= 97 and ord(t[0][0]) <= 106 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 106: #check if the fist chars match
@@ -126,9 +126,9 @@ def check_valid_input(inp):
                             return (False, board, ship_pos)
 
                         board[ord(t[0][0])-97][column] = 0b01 #first means if it is hit, second means placement
-                        print_board(board)
+                        #print_board(board)
                 else:
-                    print("e1")
+                    #print("e1")
                     return (False, board, ship_pos)
             elif t[0][1] == t[1][1] and int(t[0][1]) <= 9 and int(t[1][1]) >= 0 and int(t[1][1]) <= 9 and abs(int(t[0][1]) - int(t[1][1]))+1 < 6:
                 if ord(t[0][0]) >= 97 and ord(t[0][0]) <= 106 and ord(t[1][0]) >= 97 and ord(t[1][0]) <= 106 and t[0][0] != t[1][0]:
@@ -143,12 +143,12 @@ def check_valid_input(inp):
                            return (False, board, ship_pos)
 
                         board[row][int(t[0][1])] = 0b01 #first means if it is hit, second means placement
-                        print_board(board)
+                        #print_board(board)
             else:
-                print("e2")
+                #print("e2")
                 return (False, board, ship_pos)
 
-    print("e3")
+    #print("e3")
     return (True, board, ship_pos)
 
 if __name__ == "__main__":

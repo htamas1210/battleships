@@ -21,7 +21,7 @@ class Player():
         self.board[ord(position[0])-97][int(position[1])] = 0b11
 
     def shoot(self, position, enemy):
-        print("p", position)
+        #print("p", position)
         
         if enemy.board[ord(position[0])-97][int(position[1])] == 0b00:
             print("No ship at this position")
@@ -107,6 +107,6 @@ class Player():
             check = self.__check_valid_input(position)
 
 
-        print("rand pos: ", position)
+        print("enemy shoots at: ", position)
         
         self.shoot(position, enemy)
