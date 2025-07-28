@@ -17,6 +17,6 @@ The bottom grid is the player's grid. The yellow dots will show the position of 
 The top grid is your enemy's grid. Red dots will show if you hit your enemy's ship, and green dot if you missed.
 
 ## Last bit of info
-This game was made for the boot.dev 2025 summer hackathon. This is my first major project that I have written without any kind of tutorial (or ai). I am happy with what I have achieved,
+This game was made for the [boot.dev](boot.dev) 2025 summer hackathon. This is my first major project that I have written without any kind of tutorial (or ai). I am happy with what I have achieved,
 but not satisfied! I know the code is a mess and there are a lot of things I could have done better. I will fix them later, or just rewrite the whole thing to be better.
 Anyways, this was really fun to make, and to those who try out this really basic and simple game, I hope you enjoy it for what it is, and thank you for trying it out even if you do not vote for it. 
