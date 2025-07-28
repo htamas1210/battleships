@@ -42,7 +42,6 @@ def main():
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    time = pygame.time.Clock()
     turn_counter = 0
     first_iteration = True
     is_enemy_turn = False
